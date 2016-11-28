@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation=" 
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd 
+http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd 
+http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<bean class="com.niwodai.tech.cores.util.SpringContextUtil"></bean>
+	<!-- 配置transactionManager -->
+	<bean id="coresTransactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource">
+			<ref bean="coresDataSource" />
+		</property>
+	</bean>
+	<!-- tx:advice方式配置事务 -->
+	<tx:advice id="coresTxAdvice" transaction-manager="coresTransactionManager">
+		<tx:attributes>
+			<tx:method name="query*" read-only="true" propagation="REQUIRED" rollback-for="com.niwodai.tech.base.exception.TransactionException" />
+			<tx:method name="insert*" propagation="REQUIRES_NEW" rollback-for="com.niwodai.tech.base.exception.TransactionException"  />
+			<tx:method name="update*" propagation="REQUIRES_NEW" rollback-for="com.niwodai.tech.base.exception.TransactionException"  />
+			<tx:method name="add*" propagation="REQUIRES_NEW" rollback-for="com.niwodai.tech.base.exception.TransactionException"  />
+			<tx:method name="delete*" propagation="REQUIRES_NEW" rollback-for="com.niwodai.tech.base.exception.TransactionException"/>
+			<tx:method name="save*" propagation="REQUIRES_NEW" rollback-for="com.niwodai.tech.base.exception.TransactionException"  />
+			<tx:method name="send*" propagation="REQUIRES_NEW" rollback-for="com.niwodai.tech.base.exception.TransactionException"  />
+			<tx:method name="create*" propagation="REQUIRES_NEW" rollback-for="com.niwodai.tech.base.exception.TransactionException"  />
+			<tx:method name="*" propagation="REQUIRED" rollback-for="com.niwodai.tech.base.exception.TransactionException" />
+
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- enable transaction annotation support -->
+	<tx:annotation-driven transaction-manager="coresTransactionManager" />
+	
+	<aop:config>
+		<aop:pointcut id="dsccontrolServiceMethod"
+			expression="execution(* com.looker.core.service..*.*(..))" />
+		<aop:advisor advice-ref="possTxAdvice" pointcut-ref="dsccontrolServiceMethod" />
+	</aop:config>
+
+</beans> 

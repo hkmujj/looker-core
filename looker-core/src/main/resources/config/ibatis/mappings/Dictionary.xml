@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--add by iBatisTool DICTIONARY-->
+<sqlMap namespace="Dictionary">
+	<resultMap id="result" class="com.looker.core.model.Dictionary">
+		<result property="dicId" column="DIC_ID"/>
+		<result property="dicType" column="DIC_TYPE"/>
+		<result property="dicTypeDesc" column="DIC_TYPE_DESC"/>
+		<result property="dicCode" column="DIC_CODE"/>
+		<result property="dicDesc" column="DIC_DESC"/>
+		<result property="dicSort" column="DIC_SORT"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="updateTime" column="UPDATE_TIME"/>
+		<result property="createUser" column="CREATE_USER"/>
+		<result property="updateUser" column="UPDATE_USER"/>
+	</resultMap>
+	<!-- add Condition DICTIONARY-->
+	<sql id="DICTIONARYCondition">
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="dicId"> DIC_ID=#dicId#</isNotEmpty>
+			<isNotEmpty prepend="and" property="dicType"> DIC_TYPE=#dicType#</isNotEmpty>
+			<isNotEmpty prepend="and" property="dicTypeDesc"> DIC_TYPE_DESC=#dicTypeDesc#</isNotEmpty>
+			<isNotEmpty prepend="and" property="dicCode"> DIC_CODE=#dicCode#</isNotEmpty>
+			<isNotEmpty prepend="and" property="dicDesc"> DIC_DESC=#dicDesc#</isNotEmpty>
+			<isNotEmpty prepend="and" property="dicSort"> DIC_SORT=#dicSort#</isNotEmpty>
+			<isNotEmpty prepend="and" property="createTime"> CREATE_TIME=#createTime#</isNotEmpty>
+			<isNotEmpty prepend="and" property="updateTime"> UPDATE_TIME=#updateTime#</isNotEmpty>
+			<isNotEmpty prepend="and" property="createUser"> CREATE_USER=#createUser#</isNotEmpty>
+			<isNotEmpty prepend="and" property="updateUser"> UPDATE_USER=#updateUser#</isNotEmpty>
+		</dynamic>
+	</sql>
+	<!-- add method insertDictionary-->
+	<insert id="insertDictionary" parameterClass="com.looker.core.model.Dictionary">
+  		insert into  DICTIONARY(
+				DIC_ID,
+				DIC_TYPE,
+				DIC_TYPE_DESC,
+				DIC_CODE,
+				DIC_DESC,
+				DIC_SORT,
+				CREATE_TIME,
+				UPDATE_TIME,
+				CREATE_USER,
+				UPDATE_USER) values(
+				#dicId#,
+				#dicType#,
+				#dicTypeDesc#,
+				#dicCode#,
+				#dicDesc#,
+				#dicSort#,
+				#createTime#,
+				#updateTime#,
+				#createUser#,
+				#updateUser#)</insert>
+	<!-- add method findDictionary-->
+	<select id="findDictionary" resultMap="result" parameterClass="com.looker.core.model.Dictionary">
+ 		select 
+				DICTIONARY.DIC_ID,
+				DICTIONARY.DIC_TYPE,
+				DICTIONARY.DIC_TYPE_DESC,
+				DICTIONARY.DIC_CODE,
+				DICTIONARY.DIC_DESC,
+				DICTIONARY.DIC_SORT,
+				DICTIONARY.CREATE_TIME,
+				DICTIONARY.UPDATE_TIME,
+				DICTIONARY.CREATE_USER,
+				DICTIONARY.UPDATE_USER
+			from
+			DICTIONARY
+		<include refid="DICTIONARYCondition"/>
+	</select>
+	<!-- add method updateDictionary-->
+	<update id="updateDictionary" parameterClass="com.looker.core.model.Dictionary">
+  		 update   DICTIONARY
+		<dynamic prepend="set">
+			<isNotEmpty prepend="," property="dicId"> DIC_ID=#dicId#</isNotEmpty>
+			<isNotEmpty prepend="," property="dicType"> DIC_TYPE=#dicType#</isNotEmpty>
+			<isNotEmpty prepend="," property="dicTypeDesc"> DIC_TYPE_DESC=#dicTypeDesc#</isNotEmpty>
+			<isNotEmpty prepend="," property="dicCode"> DIC_CODE=#dicCode#</isNotEmpty>
+			<isNotEmpty prepend="," property="dicDesc"> DIC_DESC=#dicDesc#</isNotEmpty>
+			<isNotEmpty prepend="," property="dicSort"> DIC_SORT=#dicSort#</isNotEmpty>
+			<isNotEmpty prepend="," property="createTime"> CREATE_TIME=#createTime#</isNotEmpty>
+			<isNotEmpty prepend="," property="updateTime"> UPDATE_TIME=#updateTime#</isNotEmpty>
+			<isNotEmpty prepend="," property="createUser"> CREATE_USER=#createUser#</isNotEmpty>
+			<isNotEmpty prepend="," property="updateUser"> UPDATE_USER=#updateUser#</isNotEmpty>
+		</dynamic>
+  		where 
+ 	 		DIC_ID=#dicId#
+	</update>
+	<!-- add method deleteDictionary-->
+	<delete id="deleteDictionary" parameterClass="com.looker.core.model.Dictionary">
+  		 delete   DICTIONARY
+		<include refid="DICTIONARYCondition"/>
+	</delete>
+	
+	
+	<select id="findDictionaryByDicType" resultMap="result" parameterClass="java.lang.String">
+ 		select 
+				DICTIONARY.DIC_ID,
+				DICTIONARY.DIC_TYPE,
+				DICTIONARY.DIC_TYPE_DESC,
+				DICTIONARY.DIC_CODE,
+				DICTIONARY.DIC_DESC,
+				DICTIONARY.DIC_SORT,
+				DICTIONARY.CREATE_TIME,
+				DICTIONARY.UPDATE_TIME,
+				DICTIONARY.CREATE_USER,
+				DICTIONARY.UPDATE_USER
+			from
+			DICTIONARY
+			where DIC_TYPE=#dicType#
+	</select>
+</sqlMap>

@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--add by iBatisTool SYS_USER -->
+<sqlMap namespace="SysUser">
+	<resultMap id="result" class="java.util.HashMap">
+		<result property="userId" column="USER_ID" />
+		<result property="userAccount" column="USER_ACCOUNT" />
+		<result property="password" column="PASSWORD" />
+		<result property="userName" column="USER_NAME" />
+		<result property="userStatus" column="USER_STATUS" />
+		<result property="empNo" column="EMP_NO" />
+		<result property="phoneNo" column="PHONE_NO" />
+		<result property="email" column="EMAIL" />
+		<result property="depart" column="BELONG_DEPART" />
+	</resultMap>
+	<sql id="SYS_USERCondition">
+		where u.WHETHER_DELETE = 1
+			<isNotEmpty prepend="and" property="userId"> u.USER_ID=#userId#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="userAccount">
+				u.USER_ACCOUNT=#userAccount#</isNotEmpty>
+			<isNotEmpty prepend="and" property="password"> u.PASSWORD=#password#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="userName"> u.USER_NAME=#userName#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="userStatus">
+				u.USER_STATUS=#userStatus#</isNotEmpty>
+			<isNotEmpty prepend="and" property="empNo"> u.EMP_NO=#empNo#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="phoneNo"> u.PHONE_NO=#phoneNo#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="email"> u.EMAIL=#email#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="belongDepart">
+				u.BELONG_DEPART=#depart#</isNotEmpty>
+			<isNotEmpty prepend="and" property="createTime">
+				u.CREATE_TIME=#createTime#</isNotEmpty>
+			<isNotEmpty prepend="and" property="createUser">
+				u.CREATE_USER=#createUser#</isNotEmpty>
+			<isNotEmpty prepend="and" property="updateTime">
+				u.UPDATE_TIME=#updateTime#</isNotEmpty>
+			<isNotEmpty prepend="and" property="updateUser">
+				u.UPDATE_USER=#updateUser#</isNotEmpty>
+	</sql>
+	<sql id="SYS_USER_ROLECondition">
+		where u.WHETHER_DELETE = 1
+			<isNotEmpty prepend="and" property="userId"> u.USER_ID=#userId#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="userAccount">
+				u.USER_ACCOUNT=#userAccount#</isNotEmpty>
+			<isNotEmpty prepend="and" property="password"> u.PASSWORD=#password#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="userName"> u.USER_NAME=#userName#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="userStatus">
+				u.USER_STATUS=#userStatus#</isNotEmpty>
+			<isNotEmpty prepend="and" property="empNo"> u.EMP_NO=#empNo#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="phoneNo"> u.PHONE_NO=#phoneNo#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="email"> u.EMAIL=#email#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="roleId"> ur.role_id=#roleId# and u.user_id=ur.user_id
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="depart">
+				u.BELONG_DEPART=#depart#</isNotEmpty>
+			<isNotEmpty prepend="and" property="createTime">
+				u.CREATE_TIME=#createTime#</isNotEmpty>
+			<isNotEmpty prepend="and" property="createUser">
+				u.CREATE_USER=#createUser#</isNotEmpty>
+			<isNotEmpty prepend="and" property="updateTime">
+				u.UPDATE_TIME=#updateTime#</isNotEmpty>
+			<isNotEmpty prepend="and" property="updateUser">
+				u.UPDATE_USER=#updateUser#</isNotEmpty>
+	</sql>
+	<!-- add method insertSysUser -->
+	<insert id="insertSysUser" parameterClass="java.util.HashMap">
+		<selectKey resultClass="java.lang.Long" keyProperty="userId">
+			/*master*/ SELECT GET_SEQUENCE(12) FROM DUAL 
+		</selectKey>
+		insert into SYS_USER(
+		USER_ID,
+		USER_ACCOUNT,
+		PASSWORD,
+		USER_NAME,
+		USER_STATUS,
+		EMP_NO,
+		BELONG_DEPART,
+		PHONE_NO,
+		EMAIL,
+		WHETHER_DELETE,
+		CREATE_TIME,
+		CREATE_USER,
+		UPDATE_TIME,
+		UPDATE_USER) values(
+		#userId#,
+		#userAccount#,
+		#password#,
+		#userName#,
+		#userStatus#,
+		#empNo#,
+		#depart#,
+		#phoneNo#,
+		#email#,
+		'1',
+		sysdate(),
+		#createUser#,
+		#updateTime#,
+		#updateUser#)
+	</insert>
+	<!-- add method findSysUser -->
+	<select id="findSysUser" resultClass="java.util.HashMap"
+		parameterClass="java.util.HashMap">
+		select
+		distinct u.USER_ID as USER_ID,
+		u.USER_ACCOUNT,
+		u.PASSWORD,
+		u.USER_NAME,
+		(SELECT DIC_DESC as DICDESC FROM DICTIONARY d WHERE d.DIC_TYPE='status' AND d.DIC_CODE = u.USER_STATUS) AS USER_STATUS,
+		u.EMP_NO,
+		u.BELONG_DEPART,
+		u.PHONE_NO,
+		u.EMAIL
+		from
+		SYS_USER u,SYS_USER_ROLE ur
+		<include refid="SYS_USER_ROLECondition" />
+		<dynamic prepend="ORDER BY">
+   			<isNotEmpty property="order_by">
+   			 $order_by$
+   			</isNotEmpty>
+   			<isNotEmpty property="order">
+   			 $order$
+   			</isNotEmpty>
+  		</dynamic>
+	</select>
+	<!-- add method updateSysUser -->
+	<update id="updateSysUser" parameterClass="java.util.HashMap">
+		update SYS_USER
+			set UPDATE_TIME = sysdate()
+			<isNotNull prepend="," property="password"> PASSWORD=#password#
+			</isNotNull>
+			<isNotNull prepend="," property="userName"> USER_NAME=#userName#
+			</isNotNull>
+			<isNotNull prepend="," property="userStatus"> USER_STATUS=#userStatus#
+			</isNotNull>
+			<isNotNull prepend="," property="empNo"> EMP_NO=#empNo#
+			</isNotNull>
+			<isNotNull prepend="," property="phoneNo"> "PHONE_NO"=#phoneNo#
+			</isNotNull>
+			<isNotNull prepend="," property="email"> EMAIL=#email#
+			</isNotNull>
+			<isNotNull prepend="," property="depart">
+				BELONG_DEPART=#depart#</isNotNull>
+			<isNotNull prepend="," property="whetherStart">
+				WHETHER_DELETE=#whetherDelete#</isNotNull>
+			<isNotNull prepend="," property="createTime"> CREATE_TIME=#createTime#
+			</isNotNull>
+			<isNotNull prepend="," property="createUser"> CREATE_USER=#createUser#
+			</isNotNull>
+			<isNotNull prepend="," property="updateUser"> UPDATE_USER=#updateUser#
+			</isNotNull>
+		where
+		USER_ID=#userId#
+	</update>
+	
+	<select id="queryUserDetail" resultClass="java.util.HashMap" parameterClass="java.lang.Long">
+		select u.USER_ID as USER_ID,
+		       u.USER_ACCOUNT,
+		       u.USER_NAME,
+		       u.USER_STATUS ,
+		       u.belong_depart as DEPART,
+		       u.EMAIL,
+		       u.PHONE_NO
+		  from SYS_USER u
+		 where u.WHETHER_DELETE = 1
+		   and u.user_id = #userId#
+	</select>
+	
+	<select id="queryUserDetailByParams" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+		select u.USER_ID,
+		       u.USER_ACCOUNT,
+		       u.USER_NAME,
+		       u.USER_STATUS as USER_STATUS,
+		       u.belong_depart as DEPART,
+		       u.EMAIL,
+		       u.PHONE_NO
+		  from SYS_USER u
+		 <include refid="SYS_USERCondition" />
+	</select>
+	
+	<select id="findSysUser_COUNT" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+ 		select count(distinct u.user_id) 
+			from
+			SYS_USER u ,SYS_USER_ROLE ur
+		<include refid="SYS_USER_ROLECondition"/>
+	</select>
+	
+	<insert id="insertUserRole" parameterClass="java.util.HashMap">
+		insert into SYS_USER_ROLE
+		  (USER_ID, ROLE_ID, create_time, create_user, update_time, update_user)
+		values
+		  (#userId#, #roleId#, sysdate(), #createUser#, #updateTime#, #updateUser#)
+	</insert>
+	
+	<delete id="deleteUserRole" parameterClass="java.util.HashMap">
+		delete from SYS_USER_ROLE where user_id = #userId#
+	</delete>
+	
+	<select id="checkLogin" parameterClass="java.util.HashMap" resultClass="com.looker.core.model.SysUser">
+	select USER_ID       as userId,
+	       USER_ACCOUNT  as userAccount,
+	       PASSWORD,
+	       USER_NAME     userName,
+	       USER_STATUS   as userStatus,
+	       EMP_NO        as empNo,
+	       PHONE_NO      as email,
+	       EMAIL,
+	       BELONG_DEPART as belongDepart
+	  from SYS_USER
+	 where user_account = #userName#
+	   and password = #password#
+	</select>
+	<select id="queryUserList" parameterClass="java.util.HashMap" resultClass="java.util.HashMap">
+		select distinct u.USER_ID,
+		       u.USER_ACCOUNT,
+		       u.PASSWORD,
+		       u.USER_NAME,
+		       u.USER_STATUS,
+		       u.EMP_NO,
+		       u.BELONG_DEPART,
+		       u.PHONE_NO,
+		       u.EMAIL
+		  from SYS_USER u
+	  	<isNotEmpty  prepend="," property="roleId"> SYS_USER_ROLE ur</isNotEmpty>
+	  	<include refid="SYS_USERCondition" />
+	  	<isNotEmpty prepend="and" property="roleId">
+				u.roleId=ur.roleId</isNotEmpty>
+	</select>
+	
+	
+	<select id="findSysUserByUserRole" resultClass="java.util.HashMap"
+		parameterClass="java.util.HashMap">
+		select
+			u.USER_ID,
+			u.USER_ACCOUNT,
+			u.EMAIL
+		from
+			SYS_USER u
+		left join sys_user_role r ON r.USER_ID = u.USER_ID
+    	left join Sys_Role s on s.ROLE_ID = r.ROLE_ID
+    	WHERE  s.role_code = #roleCode#
+	  	<isNotEmpty prepend="and" property="userId">
+				r.USER_ID <![CDATA[<>]]> 1 </isNotEmpty>
+    	
+	</select>
+</sqlMap>

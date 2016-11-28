@@ -1,12 +1,33 @@
+# Windows:
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Python:
+*.py[cod]
+*.so
+*.egg
+*.egg-info
+dist
+build
+
+# My configurations:
+db.ini
+deploy_key_rsa
+
+#java
 *.class
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
+*.settings
 
-# Package Files #
-*.jar
-*.war
-*.ear
+.springBeans
+target/
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
+*.launch
+*.bpmn2d
+.gitignore
+.idea/
+*.iml
+
+
+bin

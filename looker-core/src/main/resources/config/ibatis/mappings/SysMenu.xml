@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--add by iBatisTool SYS_MENU -->
+<sqlMap namespace="SysMenu">
+	<resultMap id="result" class="com.looker.core.model.SysMenu">
+		<result property="menuId" column="MENU_ID" />
+		<result property="menuName" column="MENU_NAME" />
+		<result property="menuType" column="MENU_TYPE" />
+		<result property="menuUrl" column="MENU_URL" />
+		<result property="parentId" column="PARENT_ID" />
+		<result property="menuIndex" column="MENU_INDEX" />
+		<result property="menuSort" column="MENU_SORT" />
+		<result property="menuIcon" column="MENU_ICON" />
+		<result property="whetherDelete" column="WHETHER_DELETE" />
+		<result property="createTime" column="CREATE_TIME" />
+		<result property="createUser" column="CREATE_USER" />
+		<result property="updateTime" column="UPDATE_TIME" />
+		<result property="updateUser" column="UPDATE_USER" />
+	</resultMap>
+	<!-- add Condition SYS_MENU -->
+	<sql id="SYS_MENUCondition">
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="menuId"> MENU_ID=#menuId#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="menuName"> MENU_NAME=#menuName#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="menuType"> MENU_TYPE=#menuType#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="menuUrl"> MENU_URL=#menuUrl#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="parentId"> PARENT_ID=#parentId#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="menuIndex"> MENU_INDEX=#menuIndex#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="menuSort"> MENU_SORT=#menuSort#
+			</isNotEmpty>
+			<isNotEmpty prepend="and" property="whetherDelete">
+				WHETHER_DELETE=#whetherDelete#</isNotEmpty>
+			<isNotEmpty prepend="and" property="createTime">
+				CREATE_TIME=#createTime#</isNotEmpty>
+			<isNotEmpty prepend="and" property="createUser">
+				CREATE_USER=#createUser#</isNotEmpty>
+			<isNotEmpty prepend="and" property="updateTime">
+				UPDATE_TIME=#updateTime#</isNotEmpty>
+			<isNotEmpty prepend="and" property="updateUser">
+				UPDATE_USER=#updateUser#</isNotEmpty>
+		</dynamic>
+	</sql>
+	<!-- add method insertSysMenu -->
+	<insert id="insertSysMenu" parameterClass="com.looker.core.model.SysMenu">
+		insert into SYS_MENU(
+		MENU_ID,
+		MENU_NAME,
+		MENU_TYPE,
+		MENU_URL,
+		PARENT_ID,
+		MENU_INDEX,
+		MENU_SORT,
+		MENU_ICON,
+		WHETHER_DELETE,
+		CREATE_TIME,
+		CREATE_USER,
+		UPDATE_TIME,
+		UPDATE_USER) values(
+		#menuId#,
+		#menuName#,
+		#menuType#,
+		#menuUrl#,
+		#parentId#,
+		#menuIndex#,
+		#menuSort#,
+		#menuIcon#,
+		#whetherDelete#,
+		#createTime#,
+		#createUser#,
+		#updateTime#,
+		#updateUser#)
+	</insert>
+	<!-- add method findSysMenu -->
+	<select id="findSysMenu" resultMap="result"
+		parameterClass="com.looker.core.model.SysMenu">
+		select
+		SYS_MENU.MENU_ID,
+		SYS_MENU.MENU_NAME,
+		SYS_MENU.MENU_TYPE,
+		SYS_MENU.MENU_URL,
+		SYS_MENU.PARENT_ID,
+		SYS_MENU.MENU_INDEX,
+		SYS_MENU.MENU_SORT,
+		SYS_MENU.MENU_ICON,
+		SYS_MENU.WHETHER_DELETE,
+		SYS_MENU.CREATE_TIME,
+		SYS_MENU.CREATE_USER,
+		SYS_MENU.UPDATE_TIME,
+		SYS_MENU.UPDATE_USER
+		from
+		SYS_MENU
+		<include refid="SYS_MENUCondition" />
+	</select>
+	<!-- add method updateSysMenu -->
+	<update id="updateSysMenu" parameterClass="com.looker.core.model.SysMenu">
+		update SYS_MENU
+		<dynamic prepend="set">
+			<isNotEmpty prepend="," property="menuId"> MENU_ID=#menuId#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="menuName"> MENU_NAME=#menuName#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="menuType"> MENU_TYPE=#menuType#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="menuUrl"> MENU_URL=#menuUrl#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="parentId"> PARENT_ID=#parentId#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="menuIndex"> MENU_INDEX=#menuIndex#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="menuSort"> MENU_SORT=#menuSort#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="menuIcon"> MENU_ICON=#menuIcon#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="whetherDelete">
+				WHETHER_DELETE=#whetherDelete#</isNotEmpty>
+			<isNotEmpty prepend="," property="createTime"> CREATE_TIME=#createTime#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="createUser"> CREATE_USER=#createUser#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="updateTime"> UPDATE_TIME=#updateTime#
+			</isNotEmpty>
+			<isNotEmpty prepend="," property="updateUser"> UPDATE_USER=#updateUser#
+			</isNotEmpty>
+		</dynamic>
+		where
+		MENU_ID=#menuId#
+	</update>
+	<!-- add method deleteSysMenu -->
+	<delete id="deleteSysMenu" parameterClass="com.looker.core.model.SysMenu">
+		delete SYS_MENU
+		<include refid="SYS_MENUCondition" />
+	</delete>
+	
+	<select id="get_all_menu" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+		select menu_id,
+		       menu_name,
+		       menu_type,
+		       menu_url,
+		       parent_id,
+		       menu_level,
+		       menu_icon,
+		       menu_sort
+		  from SYS_MENU
+		 where whether_delete = '1'
+		 WHERE FIND_IN_SET(PARENT_ID, getChildList(1)) order by menu_sort
+		<!--  START WITH PARENT_ID = 1
+		CONNECT BY PRIOR menu_id = PARENT_ID
+		 ORDER SIBLINGS BY menu_sort -->
+	</select>
+	
+	<select id="get_user_menu" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+		select a.*
+		  from (select distinct sys_menu.MENU_ID,
+		                        sys_menu.MENU_NAME,
+		                        sys_menu.MENU_TYPE,
+		                        sys_menu.MENU_URL,
+		                        sys_menu.PARENT_ID,
+		                        sys_menu.MENU_LEVEL,
+		                        sys_menu.MENU_ICON,
+		                        sys_menu.MENU_SORT
+		          from sys_user_role, sys_role_menu, sys_menu
+		         WHERE sys_menu.whether_delete = '1'
+		           and sys_user_role.user_id = #userId#
+		           AND sys_user_role.role_id = sys_role_menu.role_id
+		           AND sys_role_menu.menu_id = sys_menu.menu_id) a
+		           WHERE FIND_IN_SET(PARENT_ID, getChildList(1)) 
+		 <!-- START WITH PARENT_ID = 1
+		CONNECT BY PRIOR menu_id = PARENT_ID
+		 ORDER SIBLINGS BY menu_sort -->		
+	</select>
+	
+	<select id="query_config_right_menu" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+		select menu_id,
+		       menu_name,
+		       menu_type,
+		       menu_url,
+		       parent_id,
+		       menu_level,
+		       menu_icon,
+		       menu_sort
+		  from SYS_MENU
+		 where whether_delete = '1'
+		   and menu_id != 1
+		   WHERE FIND_IN_SET(PARENT_ID, getChildList(0)) order by menu_sort
+		 <!-- START WITH PARENT_ID = 0
+		CONNECT BY PRIOR menu_id = PARENT_ID
+		 ORDER SIBLINGS BY menu_sort -->
+	</select>
+</sqlMap>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>登录 </title>
+    <link rel="stylesheet" href="css/iconfont.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link type="text/css" href="css/index.css" rel="stylesheet"/>
+    <link type="text/css" href="css/class_common.css" rel="stylesheet"/>
+
+
+</head>
+<body bgcolor="#353A52">
+<div class="login">
+    <div class="logintop">
+        <img src="images/330x220_2X.png">
+        <span class="platform">企业征信基础平台</span>
+    </div>
+    <div class="loginconter">
+        <div class="logoimag">
+        </div>
+        <div>
+            <input type="text" class="logininput userName" placeholder="请输入用户名"/>
+        </div>
+        <div>
+            <input type="password" class="logininput passWord" placeholder="请输入密码"/>
+        </div>
+        <div>
+         <span class="logincheck">
+            <input type="checkbox" class="remeberMe"/>
+            <cite>记住我</cite>
+            <cite class="loginml">忘记密码？</cite>
+         </span>
+        </div>
+        <div class="caveat login_null" style="display:none;">
+            <i class="icon iconfont" style="color: #FF5900;">&#xe617;</i>
+            <cite>用户名或密码不能为空！</cite>
+        </div>
+        <div class="caveat login_error" style="display:none;">
+            <i class="icon iconfont" STYLE="color: #FF5900;">&#xe617;</i>
+            <cite>用户名与密码不一致！</cite>
+        </div>
+        <div>
+            <button class="loginlog loginBtn">登录</button>
+        </div>
+    </div>
+</div>
+<div class="footer">
+    <p class="footlast">
+        Copyright © 2016 jiayincredit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;版权所有
+    </p>
+</div>
+
+</body>
+</html>
+<script src="libs/require.js"></script>
+<script src="libs/require-config.js"></script>
+<script>
+    require(['jquery', 'C'], function($, C){
+        var Page = {
+            init: function () {
+                var _this = this,
+                    USERINFO =  C.Utils.data('userInfo') || {};
+                _this.render();
+                //校验是否已经登录过
+                $.ajax({
+                    type: 'get',
+                    url: C.Api.ISLOGIN,
+                    data: {
+
+                    },
+                    success: function(res){
+                        if (res.resCode == '0') {
+                             if(res.resData.loginFlag == 'Y'){
+                                 location.href = 'index.html';
+                                 C.Utils.data('userInfo', res.resData.loginInfo);
+                             }
+                        }
+                    }
+                });
+                _this.bind();
+            },
+            render: function () {
+
+            },
+            bind: function () {
+                var _this = this;
+                $('.loginconter').on('input', '.userName', function(){
+                    $('.login_null').hide();
+                    $('.login_error').hide();
+                });
+                $('.loginconter').on('input', '.passWord', function(){
+                    $('.login_null').hide();
+                    $('.login_error').hide();
+                });
+
+                $('.loginconter').on('mouseover',  '.loginBtn', function(){
+                    if( _this.isValid()){
+                        $(this).addClass('login_active');
+                    }else{
+                        $(this).removeClass('login_active');
+                    }
+
+                });
+
+                $('.loginconter').on('mouseout',  '.loginBtn', function(){
+                    $(this).removeClass('login_active');
+                });
+                $('.loginconter').on('click', '.loginBtn', function () {
+                    var username = $('.userName').val(),
+                            password = $('.passWord').val(),
+                            rememberFlag = $('.remeberMe:checked').length > 0 ? 'Y' : 'N';
+                    if (!username || !password) {
+                        $('.login_null').show();
+                    } else {
+                        $.ajax({
+                            type: 'post',
+                            url: C.Api.LOGIN,
+                            data: {
+                                username: username,
+                                password: password,
+                                rememberFlag: rememberFlag
+                            },
+                            success: function (res) {
+                                if (res.resCode == '0') {
+                                    location.href = 'index.html';
+                                    C.Utils.data('userInfo', res.resData.loginInfo);
+                                }else if(res.resCode == '-1003'){
+                                    $('.login_error').show();
+                                }else{
+                                    $('.login_error').text(res.resMsg).show();
+                                }
+                            }
+                        });
+                    }
+                });
+                document.onkeydown = function(event){
+                    var e = event || window.event || arguments.callee.caller.arguments[0];
+                    if(e && e.keyCode==13){
+                        $('.loginconter').find('.loginBtn').trigger('click');
+                    }
+                };
+            },
+            isValid: function(){
+                var username = $('.userName').val(),
+                        password = $('.passWord').val();
+                return username && password;
+            }
+        };
+        $(function () {
+            Page.init();
+        });
+    });
+</script>

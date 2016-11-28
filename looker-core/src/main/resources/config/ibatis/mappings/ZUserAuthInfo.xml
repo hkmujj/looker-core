@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--add by iBatisTool Z_USER_AUTH_INFO-->
+<sqlMap namespace="ZUserAuthInfo">
+	<resultMap id="result" class="java.util.HashMap">
+		<result property="id" column="ID"/>
+		<result property="authCode" column="AUTH_CODE"/>
+		<result property="userName" column="USER_NAME"/>
+		<result property="state" column="STATE"/>
+		<!-- <result property="certType" column="CERT_TYPE"/> -->
+		<result property="certNo" column="CERT_NO"/>
+		<result property="productId" column="PRODUCT_ID"/>
+		<result property="belongUser" column="BELONG_USER"/>
+		<result property="channelId" column="CHANNEL_ID"/>
+		<result property="orgCode" column="ORG_CODE"/>
+		<result property="authTime" column="AUTH_TIME"/>
+		<result property="createTime" column="CREATE_TIME"/>
+		<result property="createUser" column="CREATE_USER"/>
+		<result property="updateTime" column="UPDATE_TIME"/>
+		<result property="updateUser" column="UPDATE_USER"/>
+		<result property="obtainTime" column="OBTAIN_TIME"/>
+		<result property="applyTime" column="APPLY_AUTH_TIME"/>
+		<result property="authUrl" column="AUTH_URL"/>
+		<result property="productName" column="PRODUCT_NAME"/>
+		<result property="channelName" column="CHANNEL_NAME"/>
+		<result property="orgName" column="ORG_NAME"/>
+	</resultMap>
+	
+	<!-- add Condition Z_USER_AUTH_INFO-->
+	<sql id="Z_USER_AUTH_INFOCondition">
+		<dynamic prepend="where">
+			<isNotEmpty prepend="and" property="id"> t.ID=#id#</isNotEmpty>
+			<isNotEmpty prepend="and" property="authCode"> t.AUTH_CODE=#authCode#</isNotEmpty>
+			<isNotEmpty prepend="and" property="userName"> t.USER_NAME like '%'||#userName#||'%'</isNotEmpty>
+			<isNotEmpty prepend="and" property="state"> t.STATE=#state#</isNotEmpty>
+			<isNotEmpty prepend="and" property="certType"> t.CERT_TYPE=#certType#</isNotEmpty>
+			<isNotEmpty prepend="and" property="certNo"> t.CERT_NO=#certNo#</isNotEmpty>
+			<isNotEmpty prepend="and" property="productId"> t.PRODUCT_ID=#productId#</isNotEmpty>
+			<isNotEmpty prepend="and" property="belongUser"> t.BELONG_USER =#belongUser#</isNotEmpty>
+			<isNotEmpty prepend="and" property="likebelongUser"> t.BELONG_USER like '%'||#likebelongUser#||'%'</isNotEmpty>
+			<isNotEmpty prepend="and" property="channelId"> t.CHANNEL_Id=#channelId#</isNotEmpty>
+			<isNotEmpty prepend="and" property="orgCode"> t.ORG_CODE=#orgCode#</isNotEmpty>
+			<isNotEmpty prepend="and" property="authTime"> t.AUTH_TIME=#authTime#</isNotEmpty>
+			<isNotEmpty prepend="and" property="authStartTime"> <![CDATA[t.AUTH_TIME>=#authStartTime#]]></isNotEmpty>
+			<isNotEmpty prepend="and" property="authStopTime"> <![CDATA[t.AUTH_TIME<=#authStopTime#]]></isNotEmpty>
+			<isNotEmpty prepend="and" property="updateUser"> t.UPDATE_USER=#updateUser#</isNotEmpty>
+			
+			<isNotEmpty prepend="and" property="channelName"> channel.CHANNEL_NAME like '%'||#channelName#||'%'</isNotEmpty>
+			<isNotEmpty prepend="and" property="orgName"> org.ORG_NAME like '%'||#orgName#||'%'</isNotEmpty>
+			<isNotEmpty prepend="and" property="productName"> product.PRODUCT_NAME like '%'||#productName#||'%'</isNotEmpty>
+			<isEqual property="stateFlag" compareValue="3">
+				<isNotEmpty prepend="and" property="applyTime">  to_date(t.APPLY_AUTH_TIME,'yyyy-mm-dd hh24:mi:ss')<![CDATA[>]]> to_date(#applyTime#,'yyyy-mm-dd hh24:mi:ss')</isNotEmpty>
+			</isEqual>
+			<!-- 超时状态下的数据 -->
+			<isEqual property="stateFlag" compareValue="4">
+				<isNotEmpty prepend="and" property="applyTime">  to_date(t.APPLY_AUTH_TIME,'yyyy-mm-dd hh24:mi:ss')<![CDATA[<]]> to_date(#applyTime#,'yyyy-mm-dd hh24:mi:ss')</isNotEmpty>
+			</isEqual>
+		</dynamic>
+		<isNotEmpty prepend="ORDER BY" property="order">
+   			t.$order$
+   		</isNotEmpty>
+		<isNotEmpty property="sort">
+		 	$sort$
+		</isNotEmpty>
+	</sql>
+	<!-- add method insertZUserAuthInfo-->
+	<insert id="insertZUserAuthInfo" parameterClass="com.looker.core.model.ZUserAuthInfo">
+		<selectKey resultClass="java.lang.Long" keyProperty="id">
+			/*master*/ SELECT GET_SEQUENCE(12) FROM DUAL 
+		</selectKey>
+  		insert into  Z_USER_AUTH_INFO(
+  				ID,
+				AUTH_CODE,
+				USER_NAME,
+				STATE,
+				CERT_TYPE,
+				CERT_NO,
+				PRODUCT_ID,
+				BELONG_USER,
+				CHANNEL_ID,
+				ORG_CODE,
+				AUTH_TIME,
+				CREATE_TIME,
+				CREATE_USER,
+				UPDATE_TIME,
+				APPLY_AUTH_TIME,
+				AUTH_URL,
+				UPDATE_USER) values(
+				#id#,
+				#authCode#,
+				#userName#,
+				#state#,
+				#certType#,
+				#certNo#,
+				#productId#,
+				#belongUser#,
+				#channelId#,
+				#orgCode#,
+				#authTime#,
+				#createTime#,
+				#createUser#,
+				#updateTime#,
+				#authUrl#,
+				#applyTime#,
+				#updateUser#)</insert>
+	<!-- add method findZUserAuthInfo-->
+	<select id="findZUserAuthInfo" resultMap="result" parameterClass="java.util.HashMap">
+ 		select 
+				DISTINCT t.ID,
+				t.AUTH_CODE,
+				t.USER_NAME,
+				t.STATE,
+				t.CERT_NO,
+				t.PRODUCT_ID,
+				product.PRODUCT_NAME,
+				t.BELONG_USER,
+				t.CHANNEL_ID,
+				channel.CHANNEL_NAME,
+				t.ORG_CODE,
+				org.ORG_NAME,
+				t.AUTH_TIME,
+				t.CREATE_TIME,
+				t.CREATE_USER,
+				t.UPDATE_TIME,
+				t.UPDATE_USER,
+				t.APPLY_AUTH_TIME,
+				t.OBTAIN_TIME,
+				t.AUTH_URL
+			from
+			Z_USER_AUTH_INFO t
+			left join Z_PRODUCT_MANAGE_INFO product on product.PRODUCT_ID = t.PRODUCT_ID
+			left join Z_CHANNEL_INFO channel on channel.CHANNEL_ID = t.CHANNEL_ID
+			left join Z_ORGANIZATION_INFO org on org.ORG_CODE = t.ORG_CODE
+		<include refid="Z_USER_AUTH_INFOCondition"/>
+	</select>
+	<select id="findZUserAuthInfo_COUNT" parameterClass="java.util.HashMap" resultClass="java.lang.Integer">
+ 		select 
+				count(*) 
+			from
+			Z_USER_AUTH_INFO t
+			left join Z_PRODUCT_MANAGE_INFO product on product.PRODUCT_ID = t.PRODUCT_ID
+			left join Z_CHANNEL_INFO channel on channel.CHANNEL_ID = t.CHANNEL_ID
+			left join Z_ORGANIZATION_INFO org on org.ORG_CODE = t.ORG_CODE
+		<include refid="Z_USER_AUTH_INFOCondition"/>
+	</select>
+	
+	<!-- add method updateZUserAuthInfo-->
+	<update id="updateZUserAuthInfo" parameterClass="com.looker.core.model.ZUserAuthInfo">
+  		 update   Z_USER_AUTH_INFO
+		<dynamic prepend="set">
+			<isNotNull prepend="," property="id"> ID=#id#</isNotNull>
+			<isNotNull prepend="," property="authCode"> AUTH_CODE=#authCode#</isNotNull>
+			<isNotNull prepend="," property="userName"> USER_NAME=#userName#</isNotNull>
+			<isNotNull prepend="," property="state"> STATE=#state#</isNotNull>
+			<isNotNull prepend="," property="certType"> CERT_TYPE=#certType#</isNotNull>
+			<isNotNull prepend="," property="certNo"> CERT_NO=#certNo#</isNotNull>
+			<isNotNull prepend="," property="productId"> PRODUCT_ID=#productId#</isNotNull>
+			<isNotNull prepend="," property="belongUser"> BELONG_USER=#belongUser#</isNotNull>
+			<isNotNull prepend="," property="channelId"> CHANNEL_ID=#channelId#</isNotNull>
+			<isNotNull prepend="," property="orgCode"> ORG_CODE=#orgCode#</isNotNull>
+			<isNotNull prepend="," property="authTime"> AUTH_TIME=#authTime#</isNotNull>
+			<isNotNull prepend="," property="createTime"> CREATE_TIME=#createTime#</isNotNull>
+			<isNotNull prepend="," property="createUser"> CREATE_USER=#createUser#</isNotNull>
+			<isNotNull prepend="," property="updateTime"> UPDATE_TIME=#updateTime#</isNotNull>
+			<isNotNull prepend="," property="updateUser"> UPDATE_USER=#updateUser#</isNotNull>
+			<isNotNull prepend="," property="applyTime"> APPLY_AUTH_TIME=#applyTime#</isNotNull>
+			<isNotNull prepend="," property="obtainTime"> OBTAIN_TIME=#obtainTime#</isNotNull>
+			<isNotNull prepend="," property="authUrl"> AUTH_URL=#authUrl#</isNotNull>
+		</dynamic>
+  		where 
+ 	 		ID=#id#
+	</update>
+	<!-- add method deleteZUserAuthInfo-->
+	<delete id="deleteZUserAuthInfo" parameterClass="com.looker.core.model.ZUserAuthInfo">
+  		 delete   Z_USER_AUTH_INFO t
+		<include refid="Z_USER_AUTH_INFOCondition"/>
+	</delete>
+	
+	<!-- add method updateZUserAuthState-->
+	<update id="updateZUserAuthApplyInfo" parameterClass="java.util.HashMap">
+		 UPDATE Z_USER_AUTH_INFO SET state = #destState#, APPLY_AUTH_TIME=#applyTime# 
+		 <dynamic prepend="where">
+		 	<isNotEmpty prepend="and" property="state"> STATE=#state#</isNotEmpty>
+		 	<isNotNull prepend="and id in" property="recordIds">
+				<iterate property="recordIds" open="(" close=")" conjunction=",">   
+				#recordIds[]#   
+				</iterate>   
+			</isNotNull>   
+		 </dynamic>
+	</update>
+	<!-- add method updateZUserAuthState-->
+	
+	<!-- add method updateZUserAuthStateById-->
+	<update id="updateZUserAuthStateById" parameterClass="java.util.HashMap">
+		 UPDATE Z_USER_AUTH_INFO SET state = #state# 
+		<dynamic prepend="where id in">   
+			<isNotNull property="recordIds">   
+				<iterate property="recordIds" open="(" close=")" conjunction=",">   
+				#recordIds[]#   
+				</iterate>   
+			</isNotNull>   
+		</dynamic>   
+	</update>
+	<!-- add method updateZUserAuthStateById-->
+	
+	<!-- add method updateZUserAuthStateByState-->
+	<update id="updateZUserAuthStateByState" parameterClass="java.util.HashMap">
+		 UPDATE Z_USER_AUTH_INFO SET state = #destState# WHERE state = #sourceState#
+	</update>
+	<!-- add method updateZUserAuthStateByState-->
+	
+	<!-- add method selectZUserAuthById-->
+	<select id="selectZUserAuthById" resultMap="result" parameterClass="java.util.HashMap">
+	  		select 
+				DISTINCT t.ID,
+				t.AUTH_CODE,
+				t.USER_NAME,
+				t.STATE,
+				t.CERT_NO,
+				t.PRODUCT_ID,
+				product.PRODUCT_NAME,
+				t.BELONG_USER,
+				t.CHANNEL_ID,
+				channel.CHANNEL_NAME,
+				t.ORG_CODE,
+				org.ORG_NAME,
+				t.AUTH_TIME,
+				t.CREATE_TIME,
+				t.CREATE_USER,
+				t.UPDATE_TIME,
+				t.UPDATE_USER,
+				t.APPLY_AUTH_TIME,
+				t.OBTAIN_TIME,
+				t.AUTH_URL
+			from
+				Z_USER_AUTH_INFO t
+		left join Z_PRODUCT_MANAGE_INFO product on product.PRODUCT_ID = t.PRODUCT_ID
+		left join Z_CHANNEL_INFO channel on t.CHANNEL_ID = channel.CHANNEL_ID
+		left join Z_ORGANIZATION_INFO org on t.ORG_CODE = org.ORG_CODE
+		<dynamic prepend="where t.id in">   
+			<isNotNull property="recordIds">   
+				<iterate property="recordIds" open="(" close=")" conjunction=",">   
+				#recordIds[]#   
+				</iterate>   
+			</isNotNull>   
+		</dynamic>   
+	</select>
+	<!-- add method selectZUserAuthById-->
+</sqlMap>

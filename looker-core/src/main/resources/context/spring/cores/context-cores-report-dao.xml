@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.5.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.5.xsd">
+
+	<bean id="coresDataSource" class="org.springframework.jndi.JndiObjectFactoryBean"> 
+		<property name="jndiName" value="java:comp/env/jdbc/coresDs" /> 
+	</bean> 
+		
+	<bean id="dscSqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation">
+			<value>classpath:config/ibatis/context-sql-maps.xml
+			</value>
+		</property>
+		<property name="mappingLocations">
+			<value>classpath*:config/ibatis/mappings/**/*.xml</value>
+		</property>
+		<property name="dataSource">
+			<ref bean="coresDataSource" />
+		</property>
+	</bean> 
+
+	<alias name="coresDataSource" alias="fcDataSource" />
+	
+</beans>

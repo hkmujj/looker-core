@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="codeItem">
+<typeAlias alias="CodeItem" type="com.looker.core.model.CodeItem"/>
+	<resultMap id="BaseResultMap" class="CodeItem" >
+	    <result column="ID" property="id" jdbcType="DECIMAL" />
+	    <result column="TYPE" property="type" jdbcType="VARCHAR" />
+	    <result column="CODE" property="code" jdbcType="VARCHAR" />
+	    <result column="VALUE" property="value" jdbcType="VARCHAR" />
+	    <result column="STATUS" property="status" jdbcType="VARCHAR" />
+	</resultMap>
+	
+	<!-- <insert id="insert" parameterClass="com.looker.core.model.CodeItem" >
+	    <selectKey resultClass="java.lang.Long" keyProperty="id">
+			/*master*/ SELECT GET_SEQUENCE(17) FROM DUAL 
+		</selectKey>
+	    insert into T_CODE_ITEM (ID, TYPE, CODE, 
+	      VALUE, STATUS)
+	    values (#id#, #type#, #code#, 
+	      #value#, #status#)
+	  </insert> -->
+	
+	<select id="findCodeItem" resultMap="BaseResultMap" parameterClass="CodeItem">
+ 		select 
+ 			ID, TYPE, CODE, VALUE, STATUS
+			from T_CODE_ITEM 
+			WHERE STATUS = 'T' AND TYPE =#type#
+	</select>
+	
+</sqlMap>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<!--add by iBatisTool SYS_ROLE -->
+<sqlMap namespace="SysRole">
+	<resultMap id="result" class="java.util.HashMap">
+		<result property="roleId" column="ROLE_ID" />
+		<result property="roleCode" column="ROLE_CODE" />
+		<result property="roleName" column="ROLE_NAME" />
+		<result property="roleDesc" column="ROLE_DESC" />
+	</resultMap>
+	<!-- add Condition SYS_ROLE -->
+	<sql id="SYS_ROLECondition">
+		where WHETHER_DELETE = 1
+		<isNotEmpty prepend="and" property="roleId"> ROLE_ID=#roleId#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="roleCode"> ROLE_CODE=#roleCode#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="roleName"> ROLE_NAME=#roleName#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="roleDesc"> ROLE_DESC=#roleDesc#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="createTime">
+			CREATE_TIME=#createTime#</isNotEmpty>
+		<isNotEmpty prepend="and" property="createUser">
+			CREATE_USER=#createUser#</isNotEmpty>
+		<isNotEmpty prepend="and" property="updateTime">
+			UPDATE_TIME=#updateTime#</isNotEmpty>
+		<isNotEmpty prepend="and" property="updateUser">
+			UPDATE_USER=#updateUser#</isNotEmpty>
+	</sql>
+	<!-- add method insertSysRole -->
+	<insert id="insertSysRole" parameterClass="java.util.HashMap">
+		<selectKey resultClass="java.lang.Long" keyProperty="roleId">
+			/*master*/ SELECT GET_SEQUENCE(12) FROM DUAL 
+		</selectKey>
+		insert into SYS_ROLE(
+		ROLE_ID,
+		ROLE_CODE,
+		ROLE_NAME,
+		ROLE_DESC,
+		WHETHER_DELETE,
+		CREATE_TIME,
+		CREATE_USER,
+		UPDATE_TIME,
+		UPDATE_USER) values(
+		#roleId#,
+		#roleCode#,
+		#roleName#,
+		#roleDesc#,
+		'1',
+		sysdate(),
+		#createUser#,
+		#updateTime#,
+		#updateUser#)
+	</insert>
+	<!-- add method findSysRole -->
+	<select id="findSysRole" resultMap="result" parameterClass="java.util.HashMap">
+		select
+		SYS_ROLE.ROLE_ID,
+		SYS_ROLE.ROLE_CODE,
+		SYS_ROLE.ROLE_NAME,
+		SYS_ROLE.ROLE_DESC
+		from
+		SYS_ROLE
+		<include refid="SYS_ROLECondition" />
+	</select>
+	<!-- add method updateSysRole -->
+	<update id="updateSysRole" parameterClass="java.util.HashMap">
+		update SYS_ROLE
+		<dynamic prepend="set">
+			<isNotNull prepend="," property="roleName"> ROLE_NAME=#roleName#
+			</isNotNull>
+			<isNotNull prepend="," property="roleDesc"> ROLE_DESC=#roleDesc#
+			</isNotNull>
+			<isNotNull prepend="," property="createTime"> CREATE_TIME=#createTime#
+			</isNotNull>
+			<isNotNull prepend="," property="createUser"> CREATE_USER=#createUser#
+			</isNotNull>
+			<isNotNull prepend="," property="updateTime"> UPDATE_TIME=#updateTime#
+			</isNotNull>
+			<isNotNull prepend="," property="updateUser"> UPDATE_USER=#updateUser#
+			</isNotNull>
+		</dynamic>
+		where
+		ROLE_ID=#roleId#
+	</update>
+	<!-- add method deleteSysRole -->
+	<delete id="deleteSysRole" parameterClass="java.lang.Long">
+		update SYS_ROLE set whether_delete = '0' where role_id = #roleId#
+	</delete>
+	
+	
+	<select id="queryALLRoleList" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+		select r.ROLE_Id,
+			   r.ROLE_CODE,
+			   r.ROLE_NAME,
+			   r.ROLE_DESC
+		  from SYS_ROLE r
+		 where whether_delete = '1'
+	</select>
+	
+	<select id="queryUserRoleList" resultClass="java.util.HashMap" parameterClass="java.lang.Long">
+		select
+		r.ROLE_Id,
+		r.ROLE_CODE,
+		r.ROLE_NAME,
+		r.ROLE_DESC
+		from
+		SYS_ROLE r,sys_user_role ur
+		where r.WHETHER_DELETE='1' and r.role_id = ur.role_id and ur.user_id =#userId#
+	</select>
+	
+	<select id="queryRole" resultClass="java.util.HashMap" parameterClass="java.lang.Long">
+		select
+		r.ROLE_Id   as roleId,
+		r.ROLE_CODE as roleCode,
+		r.ROLE_NAME as roleName,
+		r.ROLE_DESC as roleDesc
+		from
+		SYS_ROLE r
+		where r.WHETHER_DELETE ='1' and r.role_id =#roleId#
+	</select>
+		<select id="findSysRole_COUNT" resultClass="java.lang.Integer"
+		parameterClass="java.util.HashMap">
+		select count(1)
+		from
+		SYS_ROLE
+		<include refid="SYS_ROLECondition" />
+	</select>
+	
+	<delete id="deleteRoleMenu" parameterClass="java.util.HashMap">
+		delete from SYS_ROLE_MENU where role_id = #roleId#
+	</delete>
+	
+	<insert id="insertRoleMenu" parameterClass="java.util.HashMap">
+		insert into sys_role_menu
+		  (role_id, menu_id, create_time, create_user, update_time, update_user) values
+		  (#roleId#, #menuId#, sysdate(), #createUser#, #updateTime#, #updateUser#)
+	</insert>
+	
+	<select id="selectRoleMenus" resultClass="java.util.HashMap"
+		parameterClass="java.util.HashMap">
+		select role_id, menu_id
+		  from SYS_ROLE_MENU
+		 where role_id = #roleId#
+	</select>
+</sqlMap>
